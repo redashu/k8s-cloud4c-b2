@@ -105,6 +105,10 @@ Server:
   GitCommit:        1e1ea6e986c6c86565bc
 ```
 
+### Understanding docker setup lab environment
+
+<img src="envlab.png">
+
 
 
 
