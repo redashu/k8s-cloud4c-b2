@@ -86,4 +86,83 @@ ashupython   codev1    343f8464a8ed   47 seconds ago   920MB
 akashneel    pyv1      cb28cb7c53ac   13 minutes ago   920MB
 python       latest    815c8c75dfc0   2 weeks ago      920MB
 ```
+### lets creating container using above created image
+
+<img src="cc.png">
+
+### creating container 
+
+```
+[ec2-user@docker ashu-docker-images]$ docker  run  --name ashuc1 -itd  ashupython:codev1 
+38ccf9504767101954eaa0463ef31c106d3ebb6025cc8cfd96d4d2a8f2358d99
+
+```
+
+### checking container name 
+
+```
+
+[ec2-user@docker ashu-docker-images]$ docker  ps
+CONTAINER ID   IMAGE               COMMAND                  CREATED         STATUS         PORTS     NAMES
+38ccf9504767   ashupython:codev1   "python /mycode/ashu…"   5 seconds ago   Up 4 seconds             ashuc1
+[ec2-user@docker ashu-docker-images]$ 
+```
+
+### checking output of python code in a running container 
+
+```
+[ec2-user@docker ashu-docker-images]$ docker   logs  ashuc1
+Hello all , welcome to python..!!
+Welcome to Cloud4C..
+Welcome to Containers ..!!
+______________________
+Hello all , welcome to python
+```
+
+### docker container resources checking using docker stats
+
+```
+[ec2-user@docker ashu-docker-images]$ docker  stats ashuc1 
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT     MEM %     NET I/O       BLOCK I/O   PIDS
+38ccf9504767   ashuc1    0.01%     3.805MiB / 15.61GiB   0.02%     1.07kB / 0B   0B / 0B     1
+```
+
+### stopping a running container manually 
+
+```
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ docker   stop  ashuc1
+ashuc1
+```
+### starting the already existing container 
+
+```
+[ec2-user@docker ashu-docker-images]$ docker  start ashuc1
+ashuc1
+[ec2-user@docker ashu-docker-images]$ docker  ps
+CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS     NAMES
+691fe492cd4a   siva:newv1           "python /mycode/siva…"   50 seconds ago   Up 48 seconds             sivaf1
+d9ec0faa147a   raj:tag2             "python /mycode/raj.…"   11 minutes ago   Up 11 minutes             rajc3
+1c1bd12d0a2d   phanipython:codev1   "python /mycode/kris…"   13 minutes ago   Up 13 minutes             krish1
+8e9841ca7790   navinpython:codev1   "python /mycode/new_…"   14 minutes ago   Up 14 minutes             navcont1
+0b3e3c376394   govind:codev1        "python3 /mycode/gov…"   15 minutes ago   Up 5 minutes              govind
+48fda0ea5a84   akashneel:pyv1       "python /code/akashn…"   17 minutes ago   Up 17 minutes             akashneel1
+3752e89d2556   hann:code            "python /mycode/Bobb…"   17 minutes ago   Up 17 minutes             dean
+38ccf9504767   ashupython:codev1    "python /mycode/ashu…"   18 minutes ago   Up 1 second               ashuc1
+```
+
+### remove container forever 
+
+```
+[ec2-user@docker ashu-docker-images]$ docker  stop ashuc1
+ashuc1
+[ec2-user@docker ashu-docker-images]$ docker  rm  ashuc1
+ashuc1
+[ec2-user@docke
+```
+
+
+
+
+
 
