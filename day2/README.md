@@ -161,6 +161,10 @@ ashuc1
 [ec2-user@docke
 ```
 
+### Container life cycle understanding 
+
+<img src="lifec.png">
+
 
 
 
