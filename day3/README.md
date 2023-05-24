@@ -197,6 +197,10 @@ f717963a808b   ruchikajava:imagejava1   "java ruchika"           38 minutes ago 
 c921e1a45f15   siva:java                "java siva"              45 minutes ago   Up 45 minutes                                           sivacontainerjava1
 [ec2-user@docker ashu-docker-images]$ 
 ```
+### Introduction to docker hub -- image registry to share and store docker images
+
+<img src="hub.png">
+
 
 
 
