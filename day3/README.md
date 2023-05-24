@@ -177,6 +177,27 @@ ashuwebapp      v1             875763e874a1   49 seconds ago   146MB
 ashujava        v1             71e3c498a5d5   42 minutes ago   470MB
 ashupython      codev1         343f8464a8ed   24 hours ago     920MB
 ```
+### Understanding docker networking with port forwarding option 
+
+<img src="port.png">
+
+####
+
+```
+[ec2-user@docker ashu-docker-images]$ docker  run -itd --name ashuwebsite1  -p  1234:80    ashuwebapp:v1 
+e30719cbea8a5a49e4145302b8fa9a9ed9e6abebbab739f958c7e187bce4fd1d
+[ec2-user@docker ashu-docker-images]$ docker ps
+CONTAINER ID   IMAGE                    COMMAND                  CREATED          STATUS          PORTS                                   NAMES
+e30719cbea8a   ashuwebapp:v1            "/docker-entrypoint.…"   14 seconds ago   Up 13 seconds   0.0.0.0:1234->80/tcp, :::1234->80/tcp   ashuwebsite1
+f65b62ac40d1   venkawebapp:v1           "/docker-entrypoint.…"   8 minutes ago    Up 8 minutes    80/tcp                                  venkawebappcontainer
+f717963a808b   ruchikajava:imagejava1   "java ruchika"           38 minutes ago   Up 37 minutes                                           ruchikajc1
+5c67bd89cdfb   rajeshjava:v1            "java rajesh"            38 minutes ago   Up 38 minutes                                           rajeshjc1
+0747f3b940f6   akashneeljava:v1         "java akashneel"         39 minutes ago   Up 39 minutes                                           akashneel2
+0b2e7a57124f   asifjava:codev1          "java asif"              45 minutes ago   Up 45 minutes                                           asifjcon1
+c921e1a45f15   siva:java                "java siva"              45 minutes ago   Up 45 minutes                                           sivacontainerjava1
+[ec2-user@docker ashu-docker-images]$ 
+```
+
 
 
 
