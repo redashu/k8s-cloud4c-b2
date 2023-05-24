@@ -179,7 +179,7 @@ ashupython      codev1         343f8464a8ed   24 hours ago     920MB
 ```
 ### Understanding docker networking with port forwarding option 
 
-<img src="port.png">
+<img src="portf.png">
 
 ####
 
