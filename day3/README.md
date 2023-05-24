@@ -93,3 +93,90 @@ ashujc1
 
 ```
 
+## Understanding running a website inside container 
+
+### Understanding website and web app servers
+
+<img src="web.png">
+
+### web app server -- httpd vs nginx 
+
+<img src="webs.png">
+
+### downloading sample website code 
+
+```
+[ec2-user@docker ashu-docker-images]$ ls
+java-code  python-code  webapps
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ git clone  https://github.com/schoolofdevops/html-sample-app.git
+Cloning into 'html-sample-app'...
+remote: Enumerating objects: 74, done.
+remote: Counting objects: 100% (74/74), done.
+remote: Compressing objects: 100% (69/69), done.
+remote: Total 74 (delta 5), reused 72 (delta 5), pack-reused 0
+Receiving objects: 100% (74/74), 1.38 MiB | 41.58 MiB/s, done.
+Resolving deltas: 100% (5/5), done.
+[ec2-user@docker ashu-docker-images]$ ls
+html-sample-app  java-code  python-code  webapps
+[ec2-user@docker ashu-docker-images]$ 
+
+```
+### creating Dockerfile 
+
+```
+FROM nginx
+#  taking nginx webapp server image from docker hub 
+LABEL email=ashutoshh@linux.com 
+COPY .  /usr/share/nginx/html/
+```
+
+### .dockerignore file 
+
+```
+Dockerfile
+LICENSE.txt
+README.txt
+.dockerignore
+```
+### building image 
+
+```
+[ec2-user@docker ashu-docker-images]$ ls
+html-sample-app  java-code  python-code  webapps
+[ec2-user@docker ashu-docker-images]$ docker  build  -t  ashuwebapp:v1   html-sample-app/
+Sending build context to Docker daemon   3.61MB
+Step 1/3 : FROM nginx
+latest: Pulling from library/nginx
+f03b40093957: Pull complete 
+0972072e0e8a: Pull complete 
+a85095acb896: Pull complete 
+d24b987aa74e: Pull complete 
+6c1a86118ade: Pull complete 
+9989f7b33228: Pull complete 
+Digest: sha256:f5747a42e3adcb3168049d63278d7251d91185bb5111d2563d58729a5c9179b0
+Status: Downloaded newer image for nginx:latest
+ ---> a7be6198544f
+Step 2/3 : LABEL email=ashutoshh@linux.com
+ ---> Running in 98edd0481d2e
+Removing intermediate container 98edd0481d2e
+ ---> f0da5b029fdf
+Step 3/3 : COPY .  /usr/share/nginx/html/
+ ---> 875763e874a1
+Successfully built 875763e874a1
+Successfully tagged ashuwebapp:v1
+```
+
+### checking my images
+
+```
+ 69  docker  images 
+   70  history 
+[ec2-user@docker ashu-docker-images]$ docker  images   |  grep ashu
+ashuwebapp      v1             875763e874a1   49 seconds ago   146MB
+ashujava        v1             71e3c498a5d5   42 minutes ago   470MB
+ashupython      codev1         343f8464a8ed   24 hours ago     920MB
+```
+
+
+
