@@ -184,3 +184,39 @@ ip-172-31-27-200.ec2.internal   Ready    <none>          4d11h   v1.26.5
 ip-172-31-29-164.ec2.internal   Ready    <none>          4d11h   v1.26.5
 [ec2-user@docker ashu-docker-images]$ 
 ```
+### verify again 
+
+```
+[ec2-user@docker ashu-docker-images]$ kubectl  cluster-info 
+Kubernetes control plane is running at https://172.31.23.211:6443
+CoreDNS is running at https://172.31.23.211:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose clus
+```
+
+### more option
+
+```
+[ec2-user@docker ashu-docker-images]$ kubectl version -o yaml
+clientVersion:
+  buildDate: "2023-05-17T14:20:07Z"
+  compiler: gc
+  gitCommit: 7f6f68fdabc4df88cfea2dcf9a19b2b830f1e647
+  gitTreeState: clean
+  gitVersion: v1.27.2
+  goVersion: go1.20.4
+  major: "1"
+  minor: "27"
+  platform: linux/amd64
+kustomizeVersion: v5.0.1
+serverVersion:
+  buildDate: "2023-05-17T14:08:49Z"
+  compiler: gc
+  gitCommit: 890a139214b4de1f01543d15003b5bda71aae9c7
+  gitTreeState: clean
+  gitVersion: v1.26.5
+  goVersion: go1.19.9
+  major: "1"
+  minor: "26"
+  platform: linux/amd64
+```
