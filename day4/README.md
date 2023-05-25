@@ -61,3 +61,7 @@ The push refers to repository [docker.io/dockerashu/ashuwebsite]
 043198f57be0: Mounted from library/nginx 
 ```
 
+### overall docker knowledge to start with kubernetes journey 
+
+<img src="done.png">
+
