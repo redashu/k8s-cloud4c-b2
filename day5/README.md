@@ -181,3 +181,26 @@ status: {}
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 ```
 
+### testing 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  create  -f  ashupodnew.json 
+pod/ashupod1 created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods
+NAME       READY   STATUS    RESTARTS   AGE
+ashupod1   1/1     Running   0          4s
+lucipod    1/1     Running   0          2m3s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods -o wide
+NAME       READY   STATUS    RESTARTS   AGE     IP                NODE                            NOMINATED NODE   READINESS GATES
+ashupod1   1/1     Running   0          16s     192.168.151.134   ip-172-31-29-164.ec2.internal   <none>           <none>
+lucipod    1/1     Running   0          2m15s   192.168.109.69    ip-172-31-27-200.ec2.internal   <none>           <none>
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  delete -f ashupodnew.json 
+pod "ashupod1" deleted
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods
+NAME      READY   STATUS    RESTARTS   AGE
+lucipod   1/1     Running   0          2m28s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+
