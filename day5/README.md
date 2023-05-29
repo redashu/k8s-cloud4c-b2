@@ -141,3 +141,43 @@ exit
 pod "ashu-webapp-pod" deleted
 ```
 
+### generating yaml / json for kubernetes 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl  run  ashupod1  --image=nginx  --port 80  --dry-run=client -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod1
+  name: ashupod1
+spec:
+  containers:
+  - image: nginx
+    name: ashupod1
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  run  ashupod1  --image=nginx  --port 80  --dry-run=client -o json 
+{
+    "kind": "Pod",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "ashupod1",
+        "creationTimestamp": null,
+```
+
+### file 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  run  ashupod1  --image=nginx  --port 80  --dry-run=client -o yaml  >autopod.yaml
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  run  ashupod1  --image=nginx  --port 80  --dry-run=client -o json >ashupodnew.json 
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
