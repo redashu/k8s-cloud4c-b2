@@ -75,6 +75,28 @@ ashunewpod   1/1     Running   0          4s
 
 <img src="net5.png">
 
+### testing pod commnication 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods -o wide 
+NAME         READY   STATUS    RESTARTS   AGE   IP                NODE                            NOMINATED NODE   READINESS GATES
+ashunewpod   1/1     Running   0          24m   192.168.151.141   ip-172-31-29-164.ec2.internal   <none>           <none>
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   exec  -it  ashunewpod  --  bash 
+root@ashunewpod:/# 
+root@ashunewpod:/# curl http://192.168.151.142 
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+```
 
 
 
