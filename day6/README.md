@@ -105,6 +105,63 @@ font-family: Tahoma, Verdana, Arial, sans-serif; }
 
 <img src="lb.png">
 
+## listing all api-resources we have in k8s 1.26 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   api-resources 
+NAME                              SHORTNAMES   APIVERSION                             NAMESPACED   KIND
+bindings                                       v1                                     true         Binding
+componentstatuses                 cs           v1                                     false        ComponentStatus
+configmaps                        cm           v1                                     true         ConfigMap
+endpoints                         ep           v1                                     true         Endpoints
+events                            ev           v1                                     true         Event
+limitranges                       limits       v1                                     true         LimitRange
+namespaces                        ns           v1                                     false        Namespace
+nodes                             no           v1                                     false        Node
+persistentvolumeclaims            pvc          v1                                     true         PersistentVolumeClaim
+persistentvolumes                 pv           v1                                     false        PersistentVolume
+pods                              po           v1                                     true         Pod
+podtemplates                                   v1                                     true         PodTemplate
+replicationcontrollers            rc           v1                                     true         ReplicationController
+resourcequotas                    quota        v1                 
+```
+
+## Introduction to service 
+
+### type of service in k8s 
+
+<img src="stype.png">
+
+### Note: if we want to expose our pod webapp to external users / public user then we have to create Either Nodeport / Loadbalancer service 
+
+### Nodeport service --- we are having many method to create lets go with easy one 
+
+#### expose pod for nodeport 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl    get  pods
+NAME         READY   STATUS    RESTARTS   AGE
+ashunewpod   1/1     Running   0          61m
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  expose  pod  ashunewpod   --type  NodePort  --port  80  --name ashulb1 --dry-run=client -o yaml         >nodeport.yaml 
+[ec2-user@docker ashu-k8s-appdeploy]$ ls
+ashu-pod1.yaml  ashupodnew.json  autopod.yaml  mypod.yaml  nodeport.yaml
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+```
+
+### creating service 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl create -f nodeport.yaml 
+service/ashulb1 created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  service 
+NAME      TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+ashulb1   NodePort   10.107.24.185   <none>        80:30025/TCP   11s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+```
+
 
 
 
