@@ -97,6 +97,14 @@ font-family: Tahoma, Verdana, Arial, sans-serif; }
 </head>
 <body>
 ```
+### role of internal Nodel level Load balancer in k8s networking 
+
+<img src="nn.png">
+
+### Introduction to service for creating Internal Load balancer in k8s 
+
+<img src="lb.png">
+
 
 
 
