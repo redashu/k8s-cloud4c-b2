@@ -53,5 +53,30 @@ ashunewpod   1/1     Running   0          4s
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 
 ```
+## Networking 
+
+### there 3 level of networking we have to understand 
+
+<img src="net1.png">
+
+### master to node/ minion and node / master 
+
+<img src="net2.png">
+
+### k8s has adopted CNI over CNM network model 
+
+<img src="net3.png">
+
+### How to implement CNI --- Using calico Plugin 
+
+<img src="net4.png">
+
+### due to distributed NEtwork bridge by CNI -- pods are able to connect with each other by default 
+
+<img src="net5.png">
+
+
+
+
 
 
