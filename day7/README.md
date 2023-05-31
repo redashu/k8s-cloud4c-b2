@@ -170,5 +170,16 @@ ashulb2   LoadBalancer   10.107.177.154   <pending>     1234:30629/TCP   12s
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 ```
 
+### problem with current state 
+
+<img src="prob.png">
+
+### there are few controllers in k8s 
+
+<img src="contr.png">
+
+### Replication controller 
+
+<img src="rc.png">
 
 
