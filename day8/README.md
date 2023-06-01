@@ -92,4 +92,69 @@ ashulb2   NodePort   10.100.179.242   <none>        80:31537/TCP   69s   x=hello
 
 ```
 
+## testing power of RC 
+
+### Recreation 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  nodes
+NAME                            STATUS   ROLES           AGE   VERSION
+ip-172-31-18-85.ec2.internal    Ready    <none>          11d   v1.26.5
+ip-172-31-23-211.ec2.internal   Ready    control-plane   11d   v1.26.5
+ip-172-31-23-254.ec2.internal   Ready    <none>          11d   v1.26.5
+ip-172-31-27-200.ec2.internal   Ready    <none>          11d   v1.26.5
+ip-172-31-29-164.ec2.internal   Ready    <none>          11d   v1.26.5
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  po -o wide 
+NAME                READY   STATUS    RESTARTS   AGE   IP               NODE                            NOMINATED NODE   READINESS GATES
+ashu-app-rc-wmr7w   1/1     Running   0          19m   192.168.161.30   ip-172-31-23-254.ec2.internal   <none>           <none>
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl delete pod  ashu-app-rc-wmr7w 
+pod "ashu-app-rc-wmr7w" deleted
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  po -o wide 
+NAME                READY   STATUS    RESTARTS   AGE   IP               NODE                            NOMINATED NODE   READINESS GATES
+ashu-app-rc-wczbq   1/1     Running   0          5s    192.168.161.32   ip-172-31-23-254.ec2.internal   <none>           <none>
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+
+```
+
+### scaling 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl  scale  rc  ashu-app-rc  --replicas 3
+replicationcontroller/ashu-app-rc scaled
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  rc 
+NAME          DESIRED   CURRENT   READY   AGE
+ashu-app-rc   3         3         3       23m
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods -o wide
+NAME                READY   STATUS    RESTARTS   AGE     IP                NODE                            NOMINATED NODE   READINESS GATES
+ashu-app-rc-hh7q4   1/1     Running   0          10s     192.168.255.93    ip-172-31-18-85.ec2.internal    <none>           <none>
+ashu-app-rc-rb8cn   1/1     Running   0          10s     192.168.151.164   ip-172-31-29-164.ec2.internal   <none>           <none>
+ashu-app-rc-wczbq   1/1     Running   0          3m38s   192.168.161.32    ip-172-31-23-254.ec2.internal   <none>           <none>
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+```
+
+### service is storing pod ip:port details in endpoint database 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  svc -o wide 
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+ashulb2   NodePort   10.100.179.242   <none>        80:31537/TCP   16m   x=helloashu
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  endpoints
+NAME      ENDPOINTS                                                AGE
+ashulb2   192.168.151.164:80,192.168.161.32:80,192.168.255.93:80   16m
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  scale  rc  ashu-app-rc  --replicas 1
+replicationcontroller/ashu-app-rc scaled
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  endpoints
+NAME      ENDPOINTS           AGE
+ashulb2   192.168.161.32:80   17m
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+
 
