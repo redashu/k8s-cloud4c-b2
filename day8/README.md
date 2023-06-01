@@ -15,7 +15,7 @@ No resources found in ashu-space namespace.
 
 ### Exploring RC again by Understanding 
 
-<img src="rc1.png">
+<img src="rc.png">
 
 ### YAML of RC 
 
