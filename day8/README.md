@@ -156,5 +156,44 @@ ashulb2   192.168.161.32:80   17m
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 ```
 
+### Understanding private image registry and cloud option in registry as well
+
+<img src="reg1.png">
+
+### pushing image to azure cloud private registry 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ docker  tag  ashuwebapp:v1   ashutoshh.azurecr.io/ashutoshh/ashuwebui:v1 
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ docker  login  ashutoshh.azurecr.io  
+Username: ashutoshh
+Password: 
+WARNING! Your password will be stored unencrypted in /home/ec2-user/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+```
+
+### pushing it
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ docker  push   ashutoshh.azurecr.io/ashutoshh/ashuwebui:v1
+The push refers to repository [ashutoshh.azurecr.io/ashutoshh/ashuwebui]
+06c6edc3cac2: Pushed 
+4d33db9fdf22: Pushed 
+6791458b3942: Pushed 
+2731b5cfb616: Pushed 
+043198f57be0: Pushed 
+5dd6bfd241b4: Pushed 
+8cbe4b54fa88: Pushed 
+v1: digest: sha256:844e7692244c84fa3aa0e8c6acb0e5689b7affbf8640b944c02041743c4d4311 size: 1781
+[ec2-user@docker ashu-k8s-appdeploy]$ docker logout ashutoshh.azurecr.io
+Removing login credentials for ashutoshh.azurecr.io
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+
+
 
 
