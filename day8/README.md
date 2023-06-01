@@ -60,3 +60,36 @@ ashu-app-rc-wmr7w   1/1     Running   0          8s
 
 ```
 
+### Creating service by exposing RC 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  rc 
+NAME          DESIRED   CURRENT   READY   AGE
+ashu-app-rc   1         1         1       8m10s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   expose  rc  ashu-app-rc  --type  NodePort --port 80 --name ashulb2 --dry-run=client -o yaml   >svcbyrc.yaml 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl create -f  svcbyrc.yaml 
+service/ashulb2 created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  svc
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+ashulb2   NodePort   10.100.179.242   <none>        80:31537/TCP   5s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+### Expose is automatically matching label of pod with selector or service 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods --show-labels 
+NAME                READY   STATUS    RESTARTS   AGE     LABELS
+ashu-app-rc-wmr7w   1/1     Running   0          9m53s   x=helloashu
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  svc -o wide 
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+ashulb2   NodePort   10.100.179.242   <none>        80:31537/TCP   69s   x=helloashu
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+
+```
+
+
