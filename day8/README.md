@@ -193,6 +193,105 @@ Removing login credentials for ashutoshh.azurecr.io
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 ```
 
+### lets create pod / rc 
+
+```
+kubectl   run  ashu-newpod --image=ashutoshh.azurecr.io/ashutoshh/ashuwebui:v1  --port 80 --dry-run=client -o yaml  >azureimagepod.yaml 
+```
+
+### Deploy it 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl  create  -f  azureimagepod.yaml 
+pod/ashu-newpod created
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  pods
+NAME          READY   STATUS         RESTARTS   AGE
+ashu-newpod   0/1     ErrImagePull   0          4s
+```
+
+### checking reason using events 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  events   |  grep -i error 
+2m34s       Warning   Failed             pod/ashu-newpod                     Failed to pull image "ashutoshh.azurecr.io/ashutoshh/ashuwebui:v1": rpc error: code = Unknown desc = failed to pull and unpack image "ashutoshh.azurecr.io/ashutoshh/ashuwebui:v1": failed to resolve reference "ashutoshh.azurecr.io/ashutoshh/ashuwebui:v1": failed to authorize: failed to fetch anonymous token: unexpected status: 401 Unauthorized
+2m34s       Warning   Failed             pod/ashu-newpod                     Error: ErrImagePull
+2m23s       Warning   Failed             pod/ashu-newpod                     Error: ImagePullBackOff
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+```
+
+## Introduction to secret in k8s 
+
+<img src="secret.png">
+
+### creating secret to store azure registry details 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl   create  secret 
+Create a secret using specified subcommand.
+
+Available Commands:
+  docker-registry   Create a secret for use with a Docker registry
+  generic           Create a secret from a local file, directory, or literal value
+  tls               Create a TLS secret
+
+Usage:
+  kubectl create secret [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   create  secret  docker-registry  ashu-reg-cred  --docker-server=ashutoshh.azurecr.io       --docker-username=z --docker-password="wxV" --dry-run=client -o yaml >secret.yaml 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  create  -f  secret.yaml 
+secret/ashu-reg-cred created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  secret 
+NAME            TYPE                             DATA   AGE
+ashu-reg-cred   kubernetes.io/dockerconfigjson   1      4s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+```
+### updating secret details in yaml file of pod 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashu-newpod
+  name: ashu-newpod
+spec:
+  imagePullSecrets: # to call existing secret in pod yaml 
+  - name: ashu-reg-cred # name of secret 
+  containers:
+  - image: ashutoshh.azurecr.io/ashutoshh/ashuwebui:v1
+    name: ashu-newpod
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+### lets redeploy it 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods
+NAME          READY   STATUS             RESTARTS   AGE
+ashu-newpod   0/1     ImagePullBackOff   0          24m
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  replace -f azureimagepod.yaml --force 
+pod "ashu-newpod" deleted
+pod/ashu-newpod replaced
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods
+NAME          READY   STATUS    RESTARTS   AGE
+ashu-newpod   1/1     Running   0          7s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+
+
 
 
 
