@@ -68,4 +68,31 @@ ashu-deploy-85b7b44d4b-wzxqk   1/1     Running   0          3m10s   192.168.161.
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 ```
 
+### creating svc 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get deploy
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-deploy   3/3     3            3           5m25s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get rs
+NAME                     DESIRED   CURRENT   READY   AGE
+ashu-deploy-85b7b44d4b   3         3         3       5m28s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  po
+NAME                           READY   STATUS    RESTARTS   AGE
+ashu-deploy-85b7b44d4b-97t8p   1/1     Running   0          2m24s
+ashu-deploy-85b7b44d4b-nqzw8   1/1     Running   0          2m24s
+ashu-deploy-85b7b44d4b-wzxqk   1/1     Running   0          5m32s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  expose deployment ashu-deploy --type NodePort --port 80 --name ashulb4 --dry-run=client -o yaml >nodeport4.yaml 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl create -f nodeport4.yaml 
+service/ashulb4 created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get svc
+NAME      TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+ashulb4   NodePort   10.107.60.19   <none>        80:31284/TCP   4s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  ep 
+NAME      ENDPOINTS                                                 AGE
+ashulb4   192.168.109.103:80,192.168.151.183:80,192.168.161.48:80   8s
+```
+
 
