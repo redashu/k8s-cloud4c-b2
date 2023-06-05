@@ -107,4 +107,11 @@ kubernetes-dashboard   0         15m
 eyJhbGciOiJSUzI1NiIsImtpZCI6IkxjOGpjdllXbnFzcnNONW5ZcVA0a21QQkxYODBVN3h5Sy1uTmVPaE9zQkkifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNjg1OTcxMzM1LCJpYXQiOjE2ODU5Njc3MzUsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInVpZCI6Ijc1OTI1YTZhLWI4YTktNGJ
 ```
 
-### 
+### giving admin power to dashboard 
+
+```
+[ec2-user@docker ashu-docker-images]$ kubectl create clusterrolebinding power --clusterrole cluster-admin --serviceaccount kubernetes-dashboard:kubernetes-dashboard
+clusterrolebinding.rbac.authorization.k8s.io/power created
+```
+
+
