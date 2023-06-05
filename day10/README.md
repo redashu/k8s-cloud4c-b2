@@ -114,4 +114,33 @@ eyJhbGciOiJSUzI1NiIsImtpZCI6IkxjOGpjdllXbnFzcnNONW5ZcVA0a21QQkxYODBVN3h5Sy1uTmVP
 clusterrolebinding.rbac.authorization.k8s.io/power created
 ```
 
+### In real world we use domain name to access application 
+
+<img src="netf.png">
+
+### creating deployment and nodeport svc
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl create -f deployment1.yaml 
+deployment.apps/ashu-deploy created
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  deploy 
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-deploy   1/1     1            1           5s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  scale deployment ashu-deploy --replicas 3
+deployment.apps/ashu-deploy scaled
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  pods
+NAME                         READY   STATUS    RESTARTS   AGE
+ashu-deploy-d4dc9fd9-2vjfp   1/1     Running   0          4s
+ashu-deploy-d4dc9fd9-7lbk9   1/1     Running   0          4s
+ashu-deploy-d4dc9fd9-vghxz   1/1     Running   0          22s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  expose deployment ashu-deploy --type NodePort --port 80 --name lb008
+service/lb008 exposed
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  svc
+NAME       TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+ashu-app   LoadBalancer   10.102.134.7     <pending>     80:31481/TCP   19m
+lb008      NodePort       10.100.228.216   <none>        80:30037/TCP   5s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
 
