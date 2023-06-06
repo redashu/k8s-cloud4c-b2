@@ -72,3 +72,88 @@ ashu-java-webapp-cf7d84459-zcrxr   1/1     Running   0          17s
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 ```
 
+### creating service 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  deployment 
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-java-webapp   1/1     1            1           2m49s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl expose deployment ashu-java-webapp  --type ClusterIP --port 8080 --name ashulb8 --dry-run=client -o yaml >day11clusteripsvc.yaml 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  apply -f day11clusteripsvc.yaml 
+service/ashulb8 created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  svc
+NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+ashulb8   ClusterIP   10.101.228.139   <none>        8080/TCP   3s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+### setup of nginx ingress controller in k8s cluster
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+serviceaccount/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+configmap/ingress-nginx-controller created
+service/ingress-nginx-controller created
+```
+
+### verify it 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl -n ingress-nginx  get deploy 
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+ingress-nginx-controller   1/1     1            1           53s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl -n ingress-nginx  get pod
+NAME                                        READY   STATUS      RESTARTS   AGE
+ingress-nginx-admission-create-ctst5        0/1     Completed   0          58s
+ingress-nginx-admission-patch-5tjnf         0/1     Completed   0          58s
+ingress-nginx-controller-7c8b876764-z9x8n   1/1     Running     0          58s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl -n ingress-nginx  get  svc
+NAME                                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller             NodePort    10.108.146.72   <none>        80:30122/TCP,443:32685/TCP   63s
+ingress-nginx-controller-admission   ClusterIP   10.101.81.89    <none>        443/TCP                      63s
+```
+
+### Ingress yaml 
+
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ashu-route-rule # name of my routing rule 
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx  # class name must be used 
+  rules:
+  - host: myself.ashutoshh.in # name of website which people will access 
+    http:
+      paths:
+      - path: /  # default location of webapp 
+        pathType: Prefix
+        backend:
+          service:
+            name: ashulb8 # name of service of mine 
+            port:
+              number: 8080
+```
+
+### deploy it 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl apply -f ashu-ingress-rule.yaml 
+ingress.networking.k8s.io/ashu-route-rule created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  ingress
+NAME              CLASS   HOSTS                 ADDRESS   PORTS   AGE
+ashu-route-rule   nginx   myself.ashutoshh.in             80      5s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
