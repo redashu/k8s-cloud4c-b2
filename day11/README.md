@@ -157,3 +157,9 @@ ashu-route-rule   nginx   myself.ashutoshh.in             80      5s
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 ```
 
+### application upgradation understanding 
+
+<img src="appup.png">
+
+
+
