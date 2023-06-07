@@ -217,6 +217,21 @@ ashu-app-859878c879   0         0         0       29m
 deployment.apps/ashu-app rolled back
 ```
 
+### Horizental vs vertical scaling in pod 
+
+<img src="scale.png">
+
+### horizental auto scaling 
+
+<img src="auto.png">
+
+### scaling concept finished 
+
+<img src="scale1.png">
+
+
+
+
 
 
 
