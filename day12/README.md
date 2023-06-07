@@ -202,6 +202,21 @@ Events:
   Normal  ScalingReplicaSet  35s   deployment-controller  Scaled down re
 ```
 
+### rolling back to previous version 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  deploy 
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-app   3/3     3            3           29m
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl   get  rs
+NAME                  DESIRED   CURRENT   READY   AGE
+ashu-app-76cbf5c84b   3         3         3       5m16s
+ashu-app-859878c879   0         0         0       29m
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  rollout undo deployment ashu-app 
+deployment.apps/ashu-app rolled back
+```
+
 
 
 
