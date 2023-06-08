@@ -224,5 +224,115 @@ metadata:
     run: test1
 ```
 
+## Splunk task solution 
 
+```
+498  kubectl  create  ns  ashusplunkns --dry-run=client -o yaml 
+  499  kubectl  create  deployment ashu-splunk --image=splunk/splunk:latest  --port 8000 --dry-run=client -o yaml 
+  500  kubectl  create  secret 
+  501  kubectl  create  secret  generic  mypass  --from-literal   x="Splunk@098#"  --dry-run=client -o yaml 
+  502  kubectl  create  service nodeport ashulb9 --tcp 8000:8000 --dry-run=client -o yaml 
+```
+
+### final yaml 
+
+```
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: ashusplunkns
+spec: {}
+status: {}
+---
+apiVersion: v1
+data:
+  x: U3BsdW5rQDA5OCM=
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: mypass
+  namespace: ashusplunkns
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-splunk
+  name: ashu-splunk
+  namespace: ashusplunkns # namespace info 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-splunk
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels: # label is gonna use by service selector 
+        app: ashu-splunk
+    spec:
+      containers:
+      - image: splunk/splunk:latest
+        name: splunk
+        ports:
+        - containerPort: 8000
+        resources: {}
+        env: # pass values
+        - name: SPLUNK_START_ARGS
+          value: "--accept-license"
+        - name: SPLUNK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mypass
+              key: x
+          
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashulb9
+  name: ashulb9
+  namespace: ashusplunkns 
+spec:
+  ports:
+  - name: 8000-8000
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector: # matching label of pod here 
+    app: ashu-splunk
+  type: NodePort
+status:
+  loadBalancer: {}
+
+```
+
+### deploy it
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl apply -f ashusplunk.yaml 
+namespace/ashusplunkns created
+secret/mypass created
+deployment.apps/ashu-splunk created
+service/ashulb9 created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  -n  ashusplunkns  get  deploy
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-splunk   1/1     1            1           17s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  -n  ashusplunkns  get  po
+NAME                          READY   STATUS    RESTARTS   AGE
+ashu-splunk-f8fdddfd4-d6xjg   1/1     Running   0          20s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  -n  ashusplunkns  get  secret
+NAME     TYPE     DATA   AGE
+mypass   Opaque   1      23s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  -n  ashusplunkns  get  svc
+NAME      TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+ashulb9   NodePort   10.111.31.132   <none>        8000:32174/TCP   26s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
 
