@@ -118,3 +118,57 @@ deployment.apps/ashu-app created
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE
 ashu-app   1/1     1            1           10s
 ```
+
+### info about pod configuration with HPA 
+
+<img src="hpa11.png">
+
+### creating hpa rules
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get deploy 
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-app   1/1     1            1           5m17s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  po 
+NAME                        READY   STATUS    RESTARTS   AGE
+ashu-app-6479cff6d5-tf664   1/1     Running   0          5m21s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl autoscale  deployment ashu-app --min 2 --max 16 --cpu-percent 80 --dry-run=client -o yaml     >hpa.yaml 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl apply -f hpa.yaml 
+horizontalpodautoscaler.autoscaling/ashu-app created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  hpa
+NAME       REFERENCE             TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+ashu-app   Deployment/ashu-app   <unknown>/80%   2         16        0          4s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+```
+
+### see pod must have increased
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  hpa
+NAME       REFERENCE             TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+ashu-app   Deployment/ashu-app   0%/80%    2         16        2          40s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  po 
+NAME                        READY   STATUS    RESTARTS   AGE
+ashu-app-6479cff6d5-64lks   1/1     Running   0          36s
+ashu-app-6479cff6d5-tf664   1/1     Running   0          6m59s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+### to access app lets create service 
+
+```
+ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  deploy
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-app   2/2     2            2           11m
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  expose deployment ashu-app --type NodePort --port 80 --name ss11 
+service/ss11 exposed
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  svc
+NAME   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+ss11   NodePort   10.110.32.201   <none>        80:32043/TCP   5s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+
