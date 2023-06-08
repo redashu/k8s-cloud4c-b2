@@ -171,4 +171,58 @@ ss11   NodePort   10.110.32.201   <none>        80:32043/TCP   5s
 [ec2-user@docker ashu-k8s-appdeploy]$ 
 ```
 
+### yaml with some external process in container 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: test1
+  name: test1
+spec:
+  containers:
+  - image: alpine
+    name: test1
+    command: ['sh','-c','sleep 100000000']
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+### tips to generate from cli
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  run  test1  --image=alpine --dry-run=client -o yaml  -- sleep 1000 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: test1
+  name: test1
+spec:
+  containers:
+  - args:
+    - sleep
+    - "1000"
+    image: alpine
+    name: test1
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  run  test1  --image=alpine  --command sleep 1000          --dry-run=client -o yaml  
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: test1
+```
+
+
 
