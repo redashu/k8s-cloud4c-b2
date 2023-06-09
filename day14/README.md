@@ -189,5 +189,46 @@ NAME         STATUS   ROLES           AGE   VERSION
 masternode   Ready    control-plane   19m   v1.27.2
 ```
 
+## if you don't wanna copy 
+
+```
+PS C:\Users\hp\Downloads> kubectl get  nodes  --kubeconfig .\admin.conf.txt
+NAME         STATUS   ROLES           AGE   VERSION
+masternode   Ready    control-plane   21m   v1.27.2
+node1        Ready    <none>          19m   v1.27.2
+node2        Ready    <none>          19m   v1.27.2
+PS C:\Users\hp\Downloads>
+PS C:\Users\hp\Downloads>
+PS C:\Users\hp\Downloads> kubectl get  ns  --kubeconfig .\admin.conf.txt
+NAME              STATUS   AGE
+default           Active   21m
+kube-node-lease   Active   21m
+kube-public       Active   21m
+kube-system       Active   21m
+PS C:\Users\hp\Downloads> kubectl version -o yaml   --kubeconfig .\admin.conf.txt
+clientVersion:
+  buildDate: "2023-04-14T13:21:19Z"
+  compiler: gc
+  gitCommit: 4c9411232e10168d7b050c49a1b59f6df9d7ea4b
+  gitTreeState: clean
+  gitVersion: v1.27.1
+  goVersion: go1.20.3
+  major: "1"
+  minor: "27"
+  platform: windows/amd64
+kustomizeVersion: v5.0.1
+serverVersion:
+  buildDate: "2023-05-17T14:13:28Z"
+  compiler: gc
+  gitCommit: 7f6f68fdabc4df88cfea2dcf9a19b2b830f1e647
+  gitTreeState: clean
+  gitVersion: v1.27.2
+  goVersion: go1.20.4
+  major: "1"
+  minor: "27"
+  platform: linux/amd64
+```
+
+
 
 
