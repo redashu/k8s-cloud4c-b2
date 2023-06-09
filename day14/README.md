@@ -138,3 +138,56 @@ node2        Ready    <none>          3m34s   v1.27.2
 
 ```
 
+### Client setup on windows. by download kubectl and testing it 
+
+```
+PS C:\Users\hp> cd .\Downloads\
+PS C:\Users\hp\Downloads>
+PS C:\Users\hp\Downloads> .\kubectl.exe  version -o yaml
+clientVersion:
+  buildDate: "2023-05-17T14:20:07Z"
+  compiler: gc
+  gitCommit: 7f6f68fdabc4df88cfea2dcf9a19b2b830f1e647
+  gitTreeState: clean
+  gitVersion: v1.27.2
+  goVersion: go1.20.4
+  major: "1"
+  minor: "27"
+  platform: windows/amd64
+kustomizeVersion: v5.0.1
+
+Unable to connect to the server: dial tcp 127.0.0.1:6443: connectex: No connection could be made because the target machine actively refused it.
+PS C:\Users\hp\Downloads>
+
+```
+
+### Download and copy kubeconfig to home directory of current user by the name of config
+
+```
+PS C:\Users\hp\Downloads> mkdir  ~/.kube
+
+
+    Directory: C:\Users\hp
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----          6/9/2023   6:13 AM                .kube
+
+
+PS C:\Users\hp\Downloads> cp -v .\admin.conf.txt   C:\Users\hp\.kube\config
+VERBOSE: Performing the operation "Copy File" on target "Item: C:\Users\hp\Downloads\admin.conf.txt Destination: C:\Users\hp\.kube\config".
+PS C:\Users\hp\Downloads>
+PS C:\Users\hp\Downloads>
+PS C:\Users\hp\Downloads> kubectl get  nodes
+NAME         STATUS   ROLES           AGE   VERSION
+masternode   Ready    control-plane   18m   v1.27.2
+node1        Ready    <none>          17m   v1.27.2
+node2        Ready    <none>          16m   v1.27.2
+PS C:\Users\hp\Downloads> kubectl get  nodes
+NAME         STATUS   ROLES           AGE   VERSION
+masternode   Ready    control-plane   19m   v1.27.2
+```
+
+
+
