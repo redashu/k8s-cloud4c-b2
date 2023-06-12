@@ -235,8 +235,109 @@ my-dbpassword   Opaque                           1      3s
 ### creating deployment with storage 
 
 ```
+kubectl  create deployment ashu-db --image=mysql --port 3306 --dry-run=client -o yaml >db.yaml
+```
+
+### adding secret info in yaml
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-db
+  name: ashu-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-db
+  strategy: {}
+  template: # tempate of pod 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-db
+    spec:
+      containers:
+      - image: mysql
+        name: mysql
+        ports:
+        - containerPort: 3306
+        resources: {}
+        env:  # to adding or create ENV in pod container 
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom: # reading data from some where 
+            secretKeyRef: # secret details 
+              name: my-dbpassword
+              key: slq_pass
+status: {}
 
 ```
 
+### adding storage 
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-db
+  name: ashu-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-db
+  strategy: {}
+  template: # tempate of pod 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-db
+    spec:
+      volumes: # to create volume
+      - name: ashu-db-volume
+        hostPath:
+          path: /ashu-db-data
+          type: DirectoryOrCreate 
+      containers:
+      - image: mysql
+        name: mysql
+        ports:
+        - containerPort: 3306
+        resources: {}
+        volumeMounts: # to mount volume in mysql container 
+        - name: ashu-db-volume
+          mountPath: /var/lib/mysql/ # default location where mysql store data
+        env:  # to adding or create ENV in pod container 
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom: # reading data from some where 
+            secretKeyRef: # secret details 
+              name: my-dbpassword # name of my secret 
+              key: slq_pass # key of my secret 
+status: {}
+
+```
+
+
+### deploy it 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  apply -f db.yaml 
+deployment.apps/ashu-db created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get deploy 
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-db   0/1     1            0           5s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get rs
+NAME                 DESIRED   CURRENT   READY   AGE
+ashu-db-6654fc6bdd   1         1         0       9s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  po 
+NAME                       READY   STATUS    RESTARTS   AGE
+ashu-db-6654fc6bdd-85gl5   1/1     Running   0          13s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
 
 
