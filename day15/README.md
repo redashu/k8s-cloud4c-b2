@@ -73,8 +73,60 @@ ashupod   1/1     Running   0          9s
 ### verify data 
 
 ```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  po
+NAME      READY   STATUS    RESTARTS   AGE
+ashupod   1/1     Running   0          3m37s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  exec -it  ashupod -- sh 
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+/ # cd  /mnt/
+/mnt # ls
+ashu.txt
+/mnt # cat  -n ashu.txt 
+     1  hey all
+     2  hey all
+     3  hey all
+     4  hey all
+     5  hey all
+     6  hey all
+     7  hey all
+     8  hey all
+     9  hey all
+    10  hey all
+    11  hey all
+    12  hey all
+    13  hey all
+    14  hey all
+    15  hey all
+    16  hey all
+/mnt # exit
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+### delete pod and create 
 
 ```
+
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl delete pod ashupod 
+pod "ashupod" deleted
+
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  apply -f no_storage.yaml 
+pod/ashupod created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  po 
+NAME      READY   STATUS    RESTARTS   AGE
+ashupod   1/1     Running   0          2s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  exec -it  ashupod -- sh 
+/ # cd /mnt/
+/mnt # ls
+ashu.txt
+/mnt # cat -n ashu.txt 
+     1  hey all
+/mnt # exit
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+
+```
+
 
 
 
