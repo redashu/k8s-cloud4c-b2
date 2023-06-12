@@ -204,7 +204,39 @@ pod/ashupod created
 ```
 
 
+## Database Demo 
 
+### creating secret to store mysql root password 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  create  secret 
+Create a secret using specified subcommand.
+
+Available Commands:
+  docker-registry   Create a secret for use with a Docker registry
+  generic           Create a secret from a local file, directory, or literal value
+  tls               Create a TLS secret
+
+Usage:
+  kubectl create secret [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  create  secret generic  my-dbpassword  --from-literal  slq_pass="Db9@098" --dry-run=client -o yaml >secret_sql.yaml 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl apply -f secret_sql.yaml 
+secret/my-dbpassword created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  secret 
+NAME            TYPE                             DATA   AGE
+ashu-reg-cred   kubernetes.io/dockerconfigjson   1      10d
+my-dbpassword   Opaque                           1      3s
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+```
+
+### creating deployment with storage 
+
+```
+
+```
 
 
 
