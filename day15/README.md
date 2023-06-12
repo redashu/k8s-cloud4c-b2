@@ -127,6 +127,83 @@ ashu.txt
 
 ```
 
+### using HostPath volume 
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod
+  name: ashupod
+spec:
+  nodeName: ip-172-31-27-200.ec2.internal # static scheduling 
+  volumes: # create volume 
+  - name: ashu-volume1
+    hostPath: 
+      path: /ashu-data
+      type: DirectoryOrCreate 
+  containers: # creating container 
+  - image: alpine
+    name: ashupod
+    command: ['sh','-c','while true;do echo hey all >>/mnt/ashu.txt;sleep 15;done']
+    resources: {}
+    volumeMounts: # attaching volume to the container
+    - name: ashu-volume1
+      mountPath: /mnt  # here volume will be mounted 
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+
+### redeploy with hostpath volume 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  delete pod --all
+pod "ashupod" deleted
+[ec2-user@docker ashu-k8s-appdeploy]$ 
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl apply -f no_storage.yaml 
+pod/ashupod created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  get  po 
+NAME      READY   STATUS    RESTARTS   AGE
+ashupod   1/1     Running   0          3s
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  exec -it ashupod -- sh 
+/ # cd /mnt/
+/mnt # ls
+ashu.txt
+/mnt # cat  ashu.txt  -n
+     1  hey all
+/mnt # cat  ashu.txt  -n
+     1  hey all
+     2  hey all
+/mnt # 
+```
+
+### Now recheck it by deleting pod 
+
+```
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl delete pods --all
+pod "ashupod" deleted
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl apply -f no_storage.yaml 
+pod/ashupod created
+[ec2-user@docker ashu-k8s-appdeploy]$ kubectl  exec -it ashupod -- sh 
+/ # cd /mnt/
+/mnt # cat -n ashu.txt 
+     1  hey all
+     2  hey all
+     3  hey all
+     4  hey all
+     5  hey all
+     6  hey all
+     7  hey all
+     8  hey all
+/mnt # exit
+```
+
+
 
 
 
