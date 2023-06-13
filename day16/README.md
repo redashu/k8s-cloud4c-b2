@@ -158,4 +158,76 @@ ashu-webapp-nginx   LoadBalancer   10.107.53.44   <pending>     80:30622/TCP   9
 [ec2-user@docker ashu-docker-images]$ 
 ```
 
+### we can uninstall -- delete in kubectl 
+
+```
+[ec2-user@docker ashu-docker-images]$ helm ls
+NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+ashu-webapp     ashu-space      1               2023-06-13 12:38:16.871419244 +0000 UTC deployed        nginx-15.0.1    1.25.0     
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ helm uninstall ashu-webapp 
+release "ashu-webapp" uninstalled
+[ec2-user@docker ashu-docker-images]$ helm uninstall ashu-webapp 
+Error: uninstall: Release not loaded: ashu-webapp: release: not found
+[ec2-user@docker ashu-docker-images]$ helm ls
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ kubectl  get  all
+No resources found in ashu-space namespace.
+[ec2-user@docker ashu-docker-images]$ 
+```
+
+## Introduction to Understanding helm package -- which is technically knows as CHart -- HELM chart 
+
+<img src="chart1.png">
+
+### pulling and existing helm chart to understanding few points and structure 
+
+```
+[ec2-user@docker ashu-docker-images]$ helm search repo nginx 
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                                       
+ashu-repo/nginx                         15.0.1          1.25.0          NGINX Open Source is a web server that can be a...
+ashu-repo/nginx-ingress-controller      9.7.2           1.8.0           NGINX Ingress Controller is an Ingress controll...
+ashu-repo/nginx-intel                   2.1.15          0.4.9           DEPRECATED NGINX Open Source for Intel is a lig...
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ helm pull  ashu-repo/nginx  
+[ec2-user@docker ashu-docker-images]$ ls
+ashu-k8s-appdeploy  html-sample-app  java-code  my-customer-app  nginx-15.0.1.tgz  python-code  webapps
+[ec2-user@docker ashu-docker-images]$ 
+
+```
+
+### lets extract the charts of nginx app
+
+```
+[ec2-user@docker ashu-docker-images]$ ls
+ashu-k8s-appdeploy  html-sample-app  java-code  my-customer-app  nginx-15.0.1.tgz  python-code  webapps
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ tar  xvzf  nginx-15.0.1.tgz 
+nginx/Chart.yaml
+nginx/Chart.lock
+nginx/values.yaml
+nginx/values.schema.json
+nginx/templates/NOTES.txt
+```
+
+### lets see now
+
+```
+[ec2-user@docker ashu-docker-images]$ ls
+ashu-k8s-appdeploy  html-sample-app  java-code  my-customer-app  nginx  nginx-15.0.1.tgz  python-code  webapps
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ ls  nginx
+Chart.lock  charts  Chart.yaml  README.md  templates  values.schema.json  values.yaml
+[ec2-user@docker ashu-docker-images]$ 
+
+
+```
+
+### 
+
+<img src="chart2.png">
+
+
 
