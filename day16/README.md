@@ -70,3 +70,92 @@ version.BuildInfo{Version:"v3.12.0", GitCommit:"c9f554d75773799f72ceef38c51210f1
 
 ```
 
+## Lets get started with HELM 
+
+### By default Helm does not have any repo link
+
+```
+[ec2-user@docker ashu-docker-images]$ helm repo list
+Error: no repositories to show
+[ec2-user@docker ashu-docker-images]$ 
+
+```
+
+### adding repos 
+
+```
+[ec2-user@docker ashu-docker-images]$ helm repo list
+Error: no repositories to show
+[ec2-user@docker ashu-docker-images]$ helm repo add ashu-repo https://charts.bitnami.com/bitnami 
+"ashu-repo" has been added to your repositories
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ helm repo list
+NAME            URL                               
+ashu-repo       https://charts.bitnami.com/bitnami
+[ec2-user@docker ashu-docker-images]$ 
+
+```
+
+### search for package in repo 
+
+```
+[ec2-user@docker ashu-docker-images]$ helm search  repo  nginx 
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                                       
+ashu-repo/nginx                         15.0.1          1.25.0          NGINX Open Source is a web server that can be a...
+ashu-repo/nginx-ingress-controller      9.7.2           1.8.0           NGINX Ingress Controller is an Ingress controll...
+ashu-repo/nginx-intel                   2.1.15          0.4.9           DEPRECATED NGINX Open Source for Intel is a lig...
+[ec2-user@docker ashu-docker-images]$ helm search  repo  mysql
+NAME                            CHART VERSION   APP VERSION     DESCRIPTION                                       
+ashu-repo/mysql                 9.10.4          8.0.33          MySQL is a fast, reliable, scalable, and easy t...
+ashu-repo/phpmyadmin            11.1.2          5.2.1           phpMyAdmin is a free software tool written in P...
+ashu-repo/mariadb               12.2.5          10.11.4         MariaDB is an open source, community-developed ...
+ashu-repo/mariadb-galera        8.2.5           10.11.4         MariaDB Galera is a multi-primary database clus...
+[ec2-user@docker ashu-docker-images]$ 
+```
+
+### deploy webapp of nginx using helm package 
+
+```
+[ec2-user@docker ashu-docker-images]$ helm search  repo  nginx 
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                                       
+ashu-repo/nginx                         15.0.1          1.25.0          NGINX Open Source is a web server that can be a...
+ashu-repo/nginx-ingress-controller      9.7.2           1.8.0           NGINX Ingress Controller is an Ingress controll...
+ashu-repo/nginx-intel                   2.1.15          0.4.9           DEPRECATED NGINX Open Source for Intel is a lig...
+[ec2-user@docker ashu-docker-images]$ kubectl get all
+No resources found in ashu-space namespace.
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ helm install  ashu-webapp  ashu-repo/nginx  
+NAME: ashu-webapp
+LAST DEPLOYED: Tue Jun 13 12:38:16 2023
+NAMESPACE: ashu-space
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+```
+
+### verify it 
+
+```
+[ec2-user@docker ashu-docker-images]$ helm ls
+NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+ashu-webapp     ashu-space      1               2023-06-13 12:38:16.871419244 +0000 UTC deployed        nginx-15.0.1    1.25.0     
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ kubectl  get  deploy
+NAME                READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-webapp-nginx   1/1     1            1           80s
+[ec2-user@docker ashu-docker-images]$ kubectl  get  rs
+NAME                          DESIRED   CURRENT   READY   AGE
+ashu-webapp-nginx-8d465c59c   1         1         1       86s
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ kubectl  get  po
+NAME                                READY   STATUS    RESTARTS   AGE
+ashu-webapp-nginx-8d465c59c-cqwrc   1/1     Running   0          90s
+[ec2-user@docker ashu-docker-images]$ kubectl  get  svc
+NAME                TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+ashu-webapp-nginx   LoadBalancer   10.107.53.44   <pending>     80:30622/TCP   93s
+[ec2-user@docker ashu-docker-images]$ 
+```
+
+
