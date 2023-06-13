@@ -277,6 +277,47 @@ Pod Template:
     Image:      docker.io/dockerashu/cloud4cweb:appv3
 ```
 
+## Using Dry-run option in helm chart just to see what are the yamls which is going to deploy 
+
+```
+ec2-user@docker ashu-docker-images]$ helm  search  repo nginx 
+NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                                       
+ashu-repo/nginx                         15.0.1          1.25.0          NGINX Open Source is a web server that can be a...
+ashu-repo/nginx-ingress-controller      9.7.2           1.8.0           NGINX Ingress Controller is an Ingress controll...
+ashu-repo/nginx-intel                   2.1.15          0.4.9           DEPRECATED NGINX Open Source for Intel is a lig...
+[ec2-user@docker ashu-docker-images]$ 
+[ec2-user@docker ashu-docker-images]$ helm install ashu-webapp ashu-repo/nginx  --dry-run
+NAME: ashu-webapp
+LAST DEPLOYED: Tue Jun 13 13:15:09 2023
+NAMESPACE: ashu-space
+STATUS: pending-install
+REVISION: 1
+TEST SUITE: None
+HOOKS:
+MANIFEST:
+---
+# Source: nginx/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: ashu-webapp-nginx
+  namespace: "ashu-space"
+  labels:
+    app.kubernetes.io/name: nginx
+    helm.sh/chart: nginx-15.0.1
+    app.kubernetes.io/instance: ashu-webapp
+    app.kubernetes.io/managed-by: Helm
+```
+
+### upgrad an existing running chart by helm upgrade
+
+```
+7  helm install ashu-web  ashu-repo/nginx  --values values.yaml
+  588  history 
+  589  helm ls
+  590  helm upgrade  ashu-web  ashu-repo/nginx  --values values.yaml
+```
+
 
 
 
