@@ -229,5 +229,54 @@ Chart.lock  charts  Chart.yaml  README.md  templates  values.schema.json  values
 
 <img src="chart2.png">
 
+### Exploring values.yaml of helm charts 
+
+```
+ helm install ashu-web  ashu-repo/nginx  --values values.yaml 
+```
+
+### given values.yaml
+
+```
+image:
+  registry: docker.io
+  repository: dockerashu/cloud4cweb
+  tag: appv3 
+```
+
+## checking by kubectl 
+
+```
+[ec2-user@docker ashu-docker-images]$ kubectl  get  deploy
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-web-nginx   0/1     1            0           2m22s
+[ec2-user@docker ashu-docker-images]$ kubectl  describe deployment  ashu-web-nginx 
+Name:                   ashu-web-nginx
+Namespace:              ashu-space
+CreationTimestamp:      Tue, 13 Jun 2023 13:08:50 +0000
+Labels:                 app.kubernetes.io/instance=ashu-web
+                        app.kubernetes.io/managed-by=Helm
+                        app.kubernetes.io/name=nginx
+                        helm.sh/chart=nginx-15.0.1
+Annotations:            deployment.kubernetes.io/revision: 1
+                        meta.helm.sh/release-name: ashu-web
+                        meta.helm.sh/release-namespace: ashu-space
+Selector:               app.kubernetes.io/instance=ashu-web,app.kubernetes.io/name=nginx
+Replicas:               1 desired | 1 updated | 1 total | 0 available | 1 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:           app.kubernetes.io/instance=ashu-web
+                    app.kubernetes.io/managed-by=Helm
+                    app.kubernetes.io/name=nginx
+                    helm.sh/chart=nginx-15.0.1
+  Service Account:  default
+  Containers:
+   nginx:
+    Image:      docker.io/dockerashu/cloud4cweb:appv3
+```
+
+
 
 
