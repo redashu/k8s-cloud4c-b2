@@ -230,6 +230,13 @@ NAME         TYPE     DATA   AGE
 db-details   Opaque   1      13m
 ```
 
+### DNS in k8s 
+
+### Core Dns 
+
+<img src="dns1.png">
+
+
 
 
 
