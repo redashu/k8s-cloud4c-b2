@@ -210,6 +210,27 @@ mysql> exit
 Bye
 ```
 
+### also deploy web app image
+
+```
+[ec2-user@docker project1]$ kubectl  -n ashu-project1  get  deploy 
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-db    1/1     1            1           8m56s
+ashu-web   1/1     1            1           109s
+[ec2-user@docker project1]$ kubectl  -n ashu-project1  get  svc
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+ashu-db-lv    ClusterIP   10.100.27.16     <none>        3306/TCP         6m11s
+ashu-web-lb   NodePort    10.108.106.221   <none>        8080:30877/TCP   14s
+[ec2-user@docker project1]$ kubectl  -n ashu-project1  get  po
+NAME                        READY   STATUS    RESTARTS   AGE
+ashu-db-678fbccbd6-lw6zl    1/1     Running   0          9m3s
+ashu-web-7d48459cc8-zkn2w   1/1     Running   0          116s
+[ec2-user@docker project1]$ kubectl  -n ashu-project1  get  secrets 
+NAME         TYPE     DATA   AGE
+db-details   Opaque   1      13m
+```
+
+
 
 
 
