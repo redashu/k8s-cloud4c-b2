@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-web-lb
+  name: ashu-web-lb
+  namespace: ashu-project1
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector: # pod finer 
+    app: ashu-web # label of pod given to service of deploy web 
+  type: NodePort
+status:
+  loadBalancer: {}

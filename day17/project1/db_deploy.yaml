@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-db
+  name: ashu-db
+  namespace: ashu-project1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-db
+  strategy: {}
+  template: # template sec of pod 
+    metadata:
+      creationTimestamp: null
+      labels: # label of pod 
+        app: ashu-db
+    spec:
+      volumes: 
+      - name: ashu-db-vol
+        hostPath:
+          path: /ashu-project1-db
+          type: DirectoryOrCreate 
+      containers:
+      - image: mysql
+        name: mysql
+        ports:
+        - containerPort: 3306
+        resources: {}
+        volumeMounts:
+        - name: ashu-db-vol
+          mountPath: /var/lib/mysql/
+        env: # updating env to consume secret 
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-details
+              key: mypass
+status: {}
