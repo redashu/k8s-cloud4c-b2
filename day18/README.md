@@ -106,5 +106,74 @@ volume-venkat      4Gi        RWO            Retain           Bound       ashu-s
 [ec2-user@docker projec2]$ 
 ```
 
+### creating secret to store root password
+
+```
+[ec2-user@docker projec2]$ kubectl create secret generic ashu-db-cred1 --from-literal  dbpass="Db987#"  --dry-run=client -o yaml >secret.yaml 
+[ec2-user@docker projec2]$ kubectl  apply -f secret.yaml 
+secret/ashu-db-cred1 created
+[ec2-user@docker projec2]$ kubectl  get secret
+NAME            TYPE                             DATA   AGE
+ashu-db-cred1   Opaque                           1      4s
+ashu-reg-cred   kubernetes.io/dockerconfigjson   1      13d
+my-dbpassword   Opaque                           1      2d23h
+[ec2-user@docker projec2]$ 
+```
+
+### deployment YAML 
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-db
+  name: ashu-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-db
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-db
+    spec:
+      volumes:
+      - name: ashuvol-db
+        persistentVolumeClaim:
+          claimName: ashu-db-pvc 
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        ports:
+        - containerPort: 3306
+        resources: {}
+        volumeMounts:
+        - name: ashuvol-db
+          mountPath: /var/lib/mysql/
+        env: 
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ashu-db-cred1
+              key: dbpass 
+status: {}
+
+```
+
+### lets do this
+
+```
+[ec2-user@docker projec2]$ kubectl apply -f db_deploy.yaml 
+deployment.apps/ashu-db created
+[ec2-user@docker projec2]$ kubectl  get deploy 
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-db   1/1     1            1           6s
+```
+
 
 ## part 2 web app deployment 
