@@ -193,3 +193,67 @@ ashulbdb1   ClusterIP   10.104.154.239   <none>        3306/TCP   4s
 
 
 ## part 2 web app deployment 
+
+### yaml generation 
+
+```
+kubectl  create  deployment web-app --image=wordpress:4.8-apache --port 80 --dry-run=client -o yaml  >web_deploy.yaml 
+```
+### creating deployment of webapp
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: web-app
+  name: web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - image: wordpress:4.8-apache
+        name: wordpress
+        ports:
+        - containerPort: 80
+        resources: {}
+        env: 
+        - name: WORDPRESS_DB_HOST
+          value: ashulbdb1 # service name of db 
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ashu-db-cred1
+              key: dbpass 
+status: {}
+
+```
+
+### lets deploy it 
+
+```
+  kubectl apply -f web_deploy.yaml
+[ec2-user@docker projec2]$ kubectl  get deploy 
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-db   1/1     1            1           33m
+web-app   1/1     1            1           76s
+[ec2-user@docker projec2]$ kubectl  get po 
+NAME                      READY   STATUS    RESTARTS       AGE
+ashu-db-959fd4977-d9zdx   1/1     Running   0              33m
+ashu-test                 1/1     Running   6 (115m ago)   24h
+ashuweb                   1/1     Running   1 (115m ago)   24h
+web-app-b57bf9d75-z4lsm   1/1     Running   0              79s
+[ec2-user@docker projec2]$
+
+
+```
