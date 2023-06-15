@@ -21,3 +21,8 @@ persistentvolumeclaims            pvc          v1                               
 persistentvolumes                 pv           v1                                     false        PersistentVo
 ```
 
+## Project  2 
+
+<img src="project2.png">
+
+
