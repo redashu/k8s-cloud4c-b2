@@ -174,6 +174,22 @@ deployment.apps/ashu-db created
 NAME      READY   UP-TO-DATE   AVAILABLE   AGE
 ashu-db   1/1     1            1           6s
 ```
+### creating service 
+
+```
+[ec2-user@docker projec2]$ kubectl  get  deploy 
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-db   1/1     1            1           12m
+[ec2-user@docker projec2]$ kubectl  expose  deployment ashu-db --type ClusterIP --port 3306  --name ashulbdb1 --dry-run=client -o yaml >dbsvc.yaml 
+[ec2-user@docker projec2]$ kubectl apply -f dbsvc.yaml 
+service/ashulbdb1 created
+[ec2-user@docker projec2]$ kubectl  get  svc
+NAME        TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+ashulbdb1   ClusterIP   10.104.154.239   <none>        3306/TCP   4s
+[ec2-user@docker projec2]$ 
+
+```
+
 
 
 ## part 2 web app deployment 
