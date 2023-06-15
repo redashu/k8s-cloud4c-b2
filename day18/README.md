@@ -70,7 +70,41 @@ volume-ashu   4Gi        RWO            Retain           Available              
 [ec2-user@docker projec2]$ 
 ```
 
+### create pvc 
 
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ashu-db-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 4Gi 
+```
+###
+```
+[ec2-user@docker projec2]$ kubectl apply -f pvc.yaml 
+persistentvolumeclaim/ashu-db-pvc created
+[ec2-user@docker projec2]$ kubectl  get  pvc
+NAME          STATUS   VOLUME          CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+ashu-db-pvc   Bound    volume-venkat   4Gi        RWO            manual         8s
+[ec2-user@docker projec2]$ kubectl  get  pv
+NAME               CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                      STORAGECLASS   REASON   AGE
+mysql-pv           10Gi       RWO            Retain           Released    venkat-projet1/mysql-pvc                           24h
+volume-akashneel   4Gi        RWO            Retain           Available                              manual                  7m15s
+volume-ashu        4Gi        RWO            Retain           Available                              manual                  12m
+volume-asif        4Gi        RWO            Retain           Available                              manual                  8m7s
+volume-navi        4Gi        RWO            Retain           Available                              manual                  7m55s
+volume-prakash     4Gi        RWO            Retain           Available                              manual                  5m27s
+volume-rajesh      4Gi        RWO            Retain           Available                              manual                  11m
+volume-ruchika     4Gi        RWO            Retain           Available                              manual                  6m30s
+volume-venkat      4Gi        RWO            Retain           Bound       ashu-space/ashu-db-pvc     manual                  2m34s
+[ec2-user@docker projec2]$ 
+```
 
 
 ## part 2 web app deployment 
