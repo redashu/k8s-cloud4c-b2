@@ -28,3 +28,51 @@ lbweb       NodePort    10.111.0.115     <none>        80:31361/TCP   3s
 [ec2-user@docker projec2]$ 
 ```
 
+## PostgreSQL yaml 
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: postgresdb
+  name: postgresdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresdb
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: postgresdb
+    spec:
+      volumes:
+      - name: ashuvol9
+        hostPath:
+          path: /ashu-postdata
+          type: DirectoryOrCreate
+      containers:
+      - image: postgres
+        name: postgresql
+        ports:
+        - containerPort: 5432
+        resources: {}
+        volumeMounts:
+        - name: ashuvol9
+          mountPath: /var/lib/postgresql/data
+        env: 
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pgsec
+              key: mypass2 
+status: {}
+
+```
+
+
+
